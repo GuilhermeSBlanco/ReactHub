@@ -3,14 +3,15 @@ import Search from './search.js'
 import UserInfo from './user-info.js'
 import Actions from './actions.js'
 import Repos from './repos.js'
+import PropTypes from 'prop-types'
 
-const AppContent = () => (
+const AppContent = ( { userinfo, repos, starred } ) => (
     <div className='app'>
         <Search />
-        <UserInfo />
-        <Actions />
+        {userinfo && <UserInfo userinfo={userinfo}/>}
+        {userinfo && <Actions />}
 
-        <Repos 
+        {!!repos.length && <Repos 
           className="repos" 
           title="Repositórios" 
           repos={[
@@ -18,9 +19,9 @@ const AppContent = () => (
             { link: 'http://repositorio', name: 'gitClone' },
             { link: 'http://repositorio', name: 'gitClone' },
           ]} 
-        />
+        />}
 
-        <Repos 
+        {!!starred.length && <Repos 
           className="starred" 
           title="Favoritos" 
           repos={[
@@ -28,9 +29,15 @@ const AppContent = () => (
             {link: 'http://repositorio', name:'Gitclone'},
             {link: 'http://repositorio', name:'Gitclone'}
           ]}
-        />
+        />}
       </div>
 )
+
+AppContent.propTypes = {
+    userInfo: PropTypes.object,
+    repos: PropTypes.array.isRequired,
+    starred: PropTypes.array.isRequired
+}
 
 export default AppContent
 

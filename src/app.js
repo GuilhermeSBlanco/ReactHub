@@ -22,8 +22,10 @@ class App extends Component{
     const value = e.target.value
     const keyCode = e.wich || e.keyCode
     const ENTER = 13
+    const target = e.target
 
     if (keyCode === ENTER) {
+      target.disabled = true
       ajax().get(`https://api.github.com/users/${value}`)
         .then(({ name, avatar_url, login, public_repos, followers, following, html_url }) => {
           this.setState({
@@ -36,7 +38,12 @@ class App extends Component{
               following: following,
               url: html_url
             },
+            repos: [],
+            starred: []
           })
+        })
+        .always(() => {
+          target.disabled = false
         })
     }
   }
@@ -44,11 +51,11 @@ class App extends Component{
   getRepos (type) {
     return (e) => {
       console.log('type ', type)
-      ajax().get(`https://api.github.com/users/fdaciuk/${type}`)
+      ajax().get(`https://api.github.com/users/${this.state.userInfo.login}/${type}`)
         .then((result) => {
           this.setState({[type]: result.map(repo => (
               {
-                name: repo.name,
+                name: repo.name, 
                 url: repo.html_url
               }
             ))

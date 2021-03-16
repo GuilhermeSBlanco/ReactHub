@@ -2,6 +2,7 @@
 
 import React, { Component } from 'react'
 import AppContent from './components/app-content.js'
+import ajax from '@fdaciuk/ajax'
 
 class App extends Component{
 
@@ -9,15 +10,51 @@ class App extends Component{
     super()
 
     this.state = {
-      userInfo: {
-        username: 'Guilherme Blanco',
-        repos: 12,
-        followers: 188,
-        following: 213
-      },
+      userInfo: null,
       repos: [],
-      starred: []
+      starred: [],
+      showRepos: 0,
+      showStarred: 0,
     }
+  }
+
+  handleSearch (e) {
+    const value = e.target.value
+    const keyCode = e.wich || e.keyCode
+    const ENTER = 13
+
+    if (keyCode === ENTER) {
+      ajax().get(`https://api.github.com/users/${value}`)
+        .then(({ name, avatar_url, login, public_repos, followers, following, html_url }) => {
+          this.setState({
+            userInfo: {
+              username: name,
+              photo: avatar_url,
+              login: login,
+              repos: public_repos,
+              followers: followers,
+              following: following,
+              url: html_url
+            },
+          })
+        })
+    }
+  }
+
+  getRepos (type) {
+    return (e) => {
+      console.log('type ', type)
+      ajax().get(`https://api.github.com/users/fdaciuk/${type}`)
+        .then((result) => {
+          this.setState({[type]: result.map(repo => (
+              {
+                name: repo.name,
+                url: repo.html_url
+              }
+            ))
+          })   
+        })
+      }  
   }
 
   render () {
@@ -25,6 +62,9 @@ class App extends Component{
       userinfo={this.state.userInfo}
       repos={this.state.repos}
       starred={this.state.starred}
+      handleSearch={(e) => this.handleSearch(e)}
+      getRepos={this.getRepos('repos')}
+      getStarred={this.getRepos('starred')}
     />
   }
 

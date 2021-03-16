@@ -26,6 +26,7 @@
     "webpack-validator": "^3.0.1"
   },
   "dependencies": {
+    "@fdaciuk/ajax": "^3.0.4",
     "create-react-class": "^15.7.0",
     "prop-types": "^15.7.2"
   }

@@ -15,6 +15,8 @@ class App extends Component{
       starred: [],
       isFetching: false
     }
+
+    this.handleSearch = this.handleSearch.bind(this)
   }
 
   handleSearch (e) {
@@ -68,7 +70,7 @@ class App extends Component{
       repos={this.state.repos}
       starred={this.state.starred}
       isFetching={this.state.isFetching}
-      handleSearch={(e) => this.handleSearch(e)}
+      handleSearch={this.handleSearch}
       getRepos={this.getRepos('repos')}
       getStarred={this.getRepos('starred')}
     />

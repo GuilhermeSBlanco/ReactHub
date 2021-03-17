@@ -5,9 +5,10 @@ import Actions from './actions.js'
 import Repos from './repos.js'
 import PropTypes from 'prop-types'
 
-const AppContent = ( { handleSearch, getRepos, getStarred, userinfo, repos, starred } ) => (
+const AppContent = ( { handleSearch, getRepos, getStarred, isFetching, userinfo, repos, starred } ) => (
     <div className='app'>
-        <Search handleSearch={handleSearch}/>
+        <Search isDisabled={isFetching} handleSearch={handleSearch}/>
+        {isFetching && <div>Carregando....</div>}
         {userinfo && <UserInfo userinfo={userinfo}/>}
         {userinfo && <Actions getRepos={ getRepos } getStarred={ getStarred }/>}
 
